@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { CircleMarker, MapContainer, TileLayer, useMap, useMapEvents } from 'react-leaflet';
-import { Crosshair, LocateFixed, MapPin, RefreshCw, Trash2, X } from 'lucide-react';
+import { Crosshair, ExternalLink, LocateFixed, MapPin, RefreshCw, Trash2, X } from 'lucide-react';
 
 const DEFAULT_CENTER = [22.5726, 88.3639];
 const DEFAULT_ZOOM = 12;
@@ -9,6 +9,7 @@ const LONG_PRESS_MS = 500;
 const POLL_INTERVAL_MS = 30000;
 const MARKERS_STORAGE_KEY = 'touch-map-markers-v1';
 const WEATHER_STORAGE_KEY = 'touch-map-weather-v1';
+const VISUALISER_URL = 'https://wb-polls-2026.vercel.app';
 
 function loadPersistedMarkers() {
   if (typeof window === 'undefined') {
@@ -366,6 +367,10 @@ export default function App() {
     }
   }, []);
 
+  const handleVisualiserPointerDown = useCallback(() => {
+    vibrateFeedback();
+  }, []);
+
   return (
     <div className="relative h-screen w-screen overflow-hidden bg-slate-950 text-slate-100">
       <MapContainer
@@ -420,6 +425,18 @@ export default function App() {
             </div>
             <MapPin className="h-5 w-5 text-emerald-300" />
           </div>
+
+          <a
+            href={VISUALISER_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            onPointerDown={handleVisualiserPointerDown}
+            className="mb-3 inline-flex min-h-11 min-w-11 w-full items-center justify-center gap-2 rounded-xl border border-emerald-700/60 bg-emerald-600/90 px-3 py-2 text-sm font-semibold text-slate-950 active:scale-[0.99]"
+            aria-label="Open Visualiser"
+          >
+            Open Visualiser
+            <ExternalLink className="h-4 w-4" />
+          </a>
 
           <div className="grid grid-cols-3 gap-2 text-xs">
             <div className="rounded-xl border border-slate-700 bg-slate-800/80 p-2">
